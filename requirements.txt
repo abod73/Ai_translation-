@@ -1,0 +1,30 @@
+# ─── Telegram Bot ───────────────────────────────────────────────────
+pyrogram==2.0.106
+tgcrypto==1.2.5
+
+# ─── Video Download ─────────────────────────────────────────────────
+yt-dlp==2024.12.23
+
+# ─── Speech Recognition ─────────────────────────────────────────────
+faster-whisper==1.1.1
+
+# ─── Machine Learning / Translation ─────────────────────────────────
+torch==2.5.1
+torchaudio==2.5.1
+transformers==4.47.1
+accelerate==1.2.1
+sentencepiece==0.2.0
+protobuf==5.29.2
+sacremoses==0.1.1
+
+# ─── Database ───────────────────────────────────────────────────────
+aiosqlite==0.20.0
+
+# ─── Utilities ──────────────────────────────────────────────────────
+aiohttp==3.11.11
+aiofiles==24.1.0
+
+# ─── Optional: GPU Support (uncomment if using CUDA) ───────────────
+# --extra-index-url https://download.pytorch.org/whl/cu124
+# torch==2.5.1+cu124
+# torchaudio==2.5.1+cu124
