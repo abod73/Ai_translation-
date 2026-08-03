@@ -29,6 +29,10 @@ for d in [DOWNLOADS_DIR, OUTPUTS_DIR, SUBTITLES_DIR, SESSIONS_DIR,
 class BotConfig:
     """Main bot configuration loaded from environment variables."""
 
+    # ─── Base Paths ─────────────────────────────────────────────────
+    BASE_DIR: Path = BASE_DIR
+    SESSIONS_DIR: str = str(SESSIONS_DIR)
+
     # ─── Telegram Credentials ───────────────────────────────────────
     BOT_TOKEN: str = os.getenv("BOT_TOKEN", "")
     API_ID: int = int(os.getenv("API_ID", "0"))
