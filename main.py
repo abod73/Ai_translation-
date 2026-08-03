@@ -1,12 +1,19 @@
 """
 AI Turkish Video Translator Bot - Main Entry Point
-Initializes and runs the bot application.
+Initializes and runs the bot application (Google Colab Compatible).
 """
 
 import asyncio
 import signal
 import sys
 from pathlib import Path
+
+# تطبيق إصلاح asyncio الخاص بـ Colab تلقائياً
+try:
+    import nest_asyncio
+    nest_asyncio.apply()
+except ImportError:
+    pass
 
 # Ensure project root is in path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -44,12 +51,9 @@ def check_dependencies():
     log.info("✅ Temp directory cleaned")
 
 
-def main():
-    """Main entry point."""
-    # Setup logging first
-    setup_logger("turkish_bot")
+async def async_main():
+    """Async Main entry point for Colab/Async environment."""
     log = get_logger("main")
-
     log.info("🚀 Starting AI Turkish Video Translator Bot...")
 
     # Check dependencies
@@ -70,27 +74,29 @@ def main():
     # Create and run bot
     bot = TurkishTranslatorBot()
 
-    # Handle graceful shutdown
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-
-    def signal_handler(sig, frame):
-        log.info("Received shutdown signal")
-        loop.create_task(bot.stop())
-
-    signal.signal(signal.SIGINT, signal_handler)
-    signal.signal(signal.SIGTERM, signal_handler)
-
     try:
-        loop.run_until_complete(bot.run())
+        await bot.run()
     except KeyboardInterrupt:
         log.info("Keyboard interrupt received")
     except Exception as e:
         log.error(f"Fatal error: {e}", exc_info=True)
     finally:
-        loop.run_until_complete(bot.stop())
-        loop.close()
+        await bot.stop()
         log.info("👋 Bot shutdown complete")
+
+
+def main():
+    """Main entry point wrapper."""
+    setup_logger("turkish_bot")
+    try:
+        # إذا كنا في Colab أو بيئة بها event loop يعمل مسبقاً
+        loop = asyncio.get_event_loop()
+        if loop.is_running():
+            loop.create_task(async_main())
+        else:
+            loop.run_until_complete(async_main())
+    except Exception:
+        asyncio.run(async_main())
 
 
 if __name__ == "__main__":
