@@ -1,6 +1,6 @@
 """
 AI Turkish Video Translator Bot - Bot Module
-Pyrogram client setup and handler registration.
+Pyrogram client setup and handler registration (Google Colab Compatible).
 """
 
 import asyncio
@@ -113,8 +113,14 @@ class TurkishTranslatorBot:
         log.info("Bot stopped")
 
     async def run(self):
-        """Run the bot (blocking)."""
+        """Run the bot (Colab Compatible)."""
         await self.start()
-        log.info("🚀 Bot is running! Press Ctrl+C to stop.")
-        await self.client.idle()
-        await self.stop()
+        log.info("🚀 Bot is running! (Colab Compatible)")
+        try:
+            # استخدام حلقة الانتظار المتوافقة مع بيئة Colab بدلاً من self.client.idle()
+            while True:
+                await asyncio.sleep(3600)
+        except (KeyboardInterrupt, asyncio.CancelledError):
+            log.info("Shutdown signal received.")
+        finally:
+            await self.stop()
