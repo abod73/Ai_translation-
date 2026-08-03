@@ -283,11 +283,16 @@ def get_gpu_info() -> str:
         import torch
         if torch.cuda.is_available():
             name = torch.cuda.get_device_name(0)
-            mem = torch.cuda.get_device_properties(0).total_mem / (1024**3)
+            props = torch.cuda.get_device_properties(0)
+            
+            # حساب حجم الذاكرة بالتوافق مع التسميات المختلفة لخاصية total_memory / total_mem
+            total_bytes = getattr(props, 'total_memory', getattr(props, 'total_mem', 0))
+            mem = total_bytes / (1024**3)
             return f"{name} ({mem:.1f} GB)"
         return "No GPU"
-    except ImportError:
-        return "PyTorch not installed"
+    except Exception as e:
+        log.error(f"Error fetching GPU info: {e}")
+        return "GPU Info Unavailable"
 
 
 def normalize_arabic_text(text: str) -> str:
